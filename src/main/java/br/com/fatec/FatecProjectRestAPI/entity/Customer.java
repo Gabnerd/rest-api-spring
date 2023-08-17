@@ -45,4 +45,9 @@ public class Customer {
     @Column(name = "password_customer", nullable = false, length = 300)
     private String passwordCustomer;
 
+    @PrePersist
+    private void PrePersist(){
+        this.setDateCreatedCustomer(LocalDate.now());
+        this.setStatusCustomer(true);
+    }
 }

@@ -15,4 +15,8 @@ public class CustomerService {
     public List<Customer> getInfoCustomers(){
         return customerRepository.findAll();
     }
+
+    public Customer saveCustomer(Customer customer){
+        return customerRepository.saveAndFlush(customer);
+    }
 }

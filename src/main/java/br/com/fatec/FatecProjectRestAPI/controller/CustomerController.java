@@ -26,6 +26,8 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> save(@RequestBody Customer customer){
         Customer result = customerService.saveCustomer(customer);
-        return ResponseEntity.ok().body(ResponseGenericException.response(result));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseGenericException.response(result));
     }
+
+
 }

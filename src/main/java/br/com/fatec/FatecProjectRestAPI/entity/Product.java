@@ -43,4 +43,10 @@ public class Product {
     @Column(name = "date_created_product", nullable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateCreatedProduct;
+
+    @PrePersist
+    private void prePersist(){
+        this.setDateCreatedProduct(LocalDate.now());
+        this.setPublishedProduct(false);
+    }
 }

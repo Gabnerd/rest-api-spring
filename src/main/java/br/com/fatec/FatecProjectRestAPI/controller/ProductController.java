@@ -4,10 +4,9 @@ import br.com.fatec.FatecProjectRestAPI.entity.Product;
 import br.com.fatec.FatecProjectRestAPI.exception.ResponseGenericException;
 import br.com.fatec.FatecProjectRestAPI.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,9 +16,15 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping(value = "list")
+    @GetMapping(value = "/list")
     public ResponseEntity<Object> list(){
         List<Product> result = productService.getProducts();
         return ResponseEntity.ok().body(ResponseGenericException.response(result));
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<Object> save(@RequestBody Product product){
+        Product result = productService.saveProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseGenericException.response(result));
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -26,5 +27,11 @@ public class ProductController {
     public ResponseEntity<Object> save(@RequestBody Product product){
         Product result = productService.saveProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(ResponseGenericException.response(result));
+    }
+
+    @DeleteMapping(value = "/delete/{idProduct}")
+    public ResponseEntity<Object> delete(@PathVariable Long idProduct){
+        HashMap<String, Object> result = productService.deleteProduct(idProduct);
+        return ResponseEntity.ok().body(ResponseGenericException.response(result));
     }
 }

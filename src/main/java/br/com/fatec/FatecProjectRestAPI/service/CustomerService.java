@@ -26,7 +26,20 @@ public class CustomerService {
             return customerRepository.saveAndFlush(customer);
         }else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "A renda mensal é obrigatoria e deve ser maior que 0(zero)!");
+                    "A renda salarial é obrigatoria e deve ser maior que 0(zero)!");
+        }
+    }
+
+    public Customer updateCustomer(Customer customer){
+        if(validateCustomer(customer)){
+            if(findCustomerById(customer.getIdCustomer()) != null){
+                return customerRepository.saveAndFlush(customer);
+            }else{
+                return null;
+            }
+        }else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "A renda salarial é obrigatoria e deve ser maior que 0(zero)!");
         }
     }
 
@@ -34,8 +47,12 @@ public class CustomerService {
         Optional<Customer> customer = Optional.ofNullable(customerRepository.findById(idCustomer).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado")));
         customerRepository.delete(customer.get());
         HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "Cliente: " + customer.get().getFirstNameCustomer() + " " + customer.get().getLastNameCustomer() + " excluido com sucesso");
+        result.put("message", "Cliente: " + customer.get().getFirstNameCustomer() + " " + customer.get().getLastNameCustomer() + " excluido com sucesso");
         return result;
+    }
+
+    public Optional<Customer> findCustomerById(Long idCustomer){
+        return Optional.ofNullable(customerRepository.findById(idCustomer).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND)));
     }
 
     public Boolean validateCustomer(Customer customer){

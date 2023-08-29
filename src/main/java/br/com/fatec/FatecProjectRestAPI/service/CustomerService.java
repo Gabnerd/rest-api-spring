@@ -4,6 +4,7 @@ import br.com.fatec.FatecProjectRestAPI.entity.Customer;
 import br.com.fatec.FatecProjectRestAPI.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,6 +23,8 @@ public class CustomerService {
     }
 
     public Customer saveCustomer(Customer customer){
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        customer.setPasswordCustomer(passwordEncoder.encode(customer.getPasswordCustomer()));
         if(validateCustomer(customer)){
             return customerRepository.saveAndFlush(customer);
         }else{

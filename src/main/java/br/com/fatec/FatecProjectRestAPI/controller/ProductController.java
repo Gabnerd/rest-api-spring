@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/api/v1/product")
@@ -20,6 +21,12 @@ public class ProductController {
     @GetMapping(value = "/list")
     public ResponseEntity<Object> list(){
         List<Product> result = productService.getProducts();
+        return ResponseEntity.ok().body(ResponseGenericException.response(result));
+    }
+
+    @GetMapping(value = "/findProduct/{idProduct}")
+    public ResponseEntity<Object> find(@PathVariable Long idProduct){
+        Optional<Product> result = productService.findProductById(idProduct);
         return ResponseEntity.ok().body(ResponseGenericException.response(result));
     }
 

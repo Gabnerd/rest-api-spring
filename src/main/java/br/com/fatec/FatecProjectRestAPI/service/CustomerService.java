@@ -23,9 +23,8 @@ public class CustomerService {
     }
 
     public Customer saveCustomer(Customer customer){
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        customer.setPasswordCustomer(passwordEncoder.encode(customer.getPasswordCustomer()));
         if(validateCustomer(customer)){
+            encryptPassword(customer);
             return customerRepository.saveAndFlush(customer);
         }else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
@@ -35,6 +34,7 @@ public class CustomerService {
 
     public Customer updateCustomer(Customer customer){
         if(validateCustomer(customer)){
+            encryptPassword(customer);
             if(findCustomerById(customer.getIdCustomer()) != null){
                 return customerRepository.saveAndFlush(customer);
             }else{
@@ -67,5 +67,21 @@ public class CustomerService {
         }else{
             return false;
         }
+    }
+
+    public void encryptPassword(Customer customer){
+        BCryptPasswordEncoder encrypt = new BCryptPasswordEncoder();
+        String encryptedPassword = null;
+        if (customer.getIdCustomer() == null) {
+            encryptedPassword = encrypt.encode(customer.getPasswordCustomer());
+            customer.setPasswordCustomer(encryptedPassword);
+        } else {
+            if (!customerRepository.findById(customer.getIdCustomer()).get().getPasswordCustomer()
+                    .equals(customer.getPasswordCustomer())) {
+                encryptedPassword = encrypt.encode(customer.getPasswordCustomer());
+                customer.setPasswordCustomer(encryptedPassword);
+            }
+        }
+
     }
 }
